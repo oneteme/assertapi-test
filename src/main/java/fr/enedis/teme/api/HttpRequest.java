@@ -1,4 +1,4 @@
-package fr.enedis.teme;
+package fr.enedis.teme.api;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_16;

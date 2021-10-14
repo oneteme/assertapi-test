@@ -1,4 +1,4 @@
-package fr.enedis.teme;
+package fr.enedis.teme.api;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -7,10 +7,12 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public final class ApiAssertions {
         	assertEquals(eRes.getStatusCodeValue(), aRes.getStatusCodeValue(), "Status code");
         	assertEquals(eRes.getHeaders().getContentType(), aRes.getHeaders().getContentType(), "Content Type");
 			if(APPLICATION_JSON.isCompatibleWith(eRes.getHeaders().getContentType())){
-				JSONAssert.assertEquals(
+				assertEquals(
 						excludePaths(eRes.getBody(), query.getExpected()), 
 						excludePaths(aRes.getBody(), query.getActual()), 
 						query.isStrict());
@@ -61,9 +63,7 @@ public final class ApiAssertions {
     	var v = new String(content, hr.charset());
 		if(hr.getExcludePaths() != null) {
 			var json = JsonPath.parse(v);
-	    	for(String p : hr.getExcludePaths()) {
-	    		json.delete(p);
-	    	}
+			Stream.of(hr.getExcludePaths()).forEach(json::delete);
 	    	v = json.jsonString();
 		}
 		return v;

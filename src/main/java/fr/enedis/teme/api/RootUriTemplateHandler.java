@@ -1,4 +1,4 @@
-package fr.enedis.teme;
+package fr.enedis.teme.api;
 
 import java.net.URI;
 import java.util.Map;

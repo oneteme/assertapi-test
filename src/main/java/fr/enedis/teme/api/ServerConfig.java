@@ -1,4 +1,6 @@
-package fr.enedis.teme;
+package fr.enedis.teme.api;
+
+import static java.lang.String.format;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,12 +26,12 @@ public class ServerConfig {
 
 	public String buildRootUrl() {
     	
-    	return String.format("http%s://%s", 
+    	return format("http%s://%s", 
     			port == 443 ? "s" : "", host) + 
     			(port == 80 || port == 443 ? "" : ":" + port) + "/";
     }
 	
-	public static ServerConfig localhost(int port) {
+	public static ServerConfig localServer(int port) {
 		
 		return new ServerConfig("localhost", port);
 	}

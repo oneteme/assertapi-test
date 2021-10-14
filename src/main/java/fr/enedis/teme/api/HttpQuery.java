@@ -1,4 +1,4 @@
-package fr.enedis.teme;
+package fr.enedis.teme.api;
 
 import static java.util.Objects.requireNonNull;
 
