@@ -21,8 +21,8 @@ public final class HttpQuery extends HttpRequest {
 
 	public HttpQuery build() {
 		if(getUri() == null) {
-			expected = requireNonNull(expected);
-			actual = requireNonNull(actual);
+			requireNonNull(expected);
+			requireNonNull(actual);
 		}
 		else {
 			expected = actual = this;

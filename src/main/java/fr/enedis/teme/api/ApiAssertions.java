@@ -37,7 +37,7 @@ public final class ApiAssertions {
 	
 	public static void assertResponseEquals(HttpQuery query, RestTemplate exTemp, RestTemplate acTemp) throws Exception  {
 		
-		assumeFalse(query.isDisabled(), "skipped test");
+		assumeFalse(query.isDisabled(), "skipped test"); //not working with mvn test
     	String aUrl = query.getActual().url();
     	CompletableFuture<ResponseEntity<byte[]>> af = query.isParallel() 
     			? supplyAsync(()-> acTemp.exchange(aUrl, query.getActual().httpMethod(), null, byte[].class), commonPool())
@@ -85,7 +85,6 @@ public final class ApiAssertions {
 				TEXT_PLAIN, TEXT_HTML, TEXT_XML)
 				.anyMatch(media::isCompatibleWith);
 	}
-	
 
     private static String excludePaths(String v, HttpRequest hr) {
 		if(hr.getExcludePaths() != null) {
