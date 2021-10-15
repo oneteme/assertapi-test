@@ -24,17 +24,17 @@ public class HttpRequest {
 	private String[] excludePaths;
 	
 	public String url() {
-		return requireNonNull(uri).startsWith("/") ? uri : "/" + uri;
+		return requireNonNull(uri).trim().startsWith("/") ? uri : "/" + uri;
 	}
 
 	public HttpMethod httpMethod() {
 		
-		return HttpMethod.valueOf(requireNonNull(method).toUpperCase());
+		return HttpMethod.valueOf(requireNonNull(method).trim().toUpperCase());
 	}
 	
 	public Charset charset(){
 		
-		switch(requireNonNull(charset).toUpperCase().replace('-', '_')) {
+		switch(requireNonNull(charset).trim().toUpperCase().replace('-', '_')) {
 			case "ISO_8859_1": return ISO_8859_1;
 			case "UTF_8": return UTF_8;
 			case "UTF_16": return UTF_16;

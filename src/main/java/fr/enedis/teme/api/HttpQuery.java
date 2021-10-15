@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public final class HttpQuery extends HttpRequest {
 
+	private boolean debug = false;
 	private boolean disabled = false;
 	private boolean strict = true;
 	private boolean parallel = true;
@@ -27,6 +28,11 @@ public final class HttpQuery extends HttpRequest {
 			expected = actual = this;
 		}
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return description + " : " + super.toString();
 	}
 	
 }
