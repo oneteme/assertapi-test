@@ -1,7 +1,6 @@
 # Api-Test
 
-Integration
-
+Integration pom.xml
 
 ```
 <dependency>
@@ -12,6 +11,7 @@ Integration
 </dependency>
 ```
 
+Test class
 
 ```
 class IntegrationTest {
