@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public final class ApiAssertions {
 
-	public static void assertResponseEquals(RestTemplate exTemp, RestTemplate acTemp, HttpQuery query) throws Exception {
+	public static void assertResponseEquals(HttpQuery query, RestTemplate exTemp, RestTemplate acTemp) throws Exception {
 
     	String aUrl = query.getActual().url();
     	CompletableFuture<ResponseEntity<byte[]>> af = query.isParallel() 

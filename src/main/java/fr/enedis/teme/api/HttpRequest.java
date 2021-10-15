@@ -34,12 +34,12 @@ public class HttpRequest {
 	
 	public Charset charset(){
 		
-		switch (requireNonNull(charset).toUpperCase().replace('-', '_')) {
+		switch(requireNonNull(charset).toUpperCase().replace('-', '_')) {
 			case "ISO_8859_1": return ISO_8859_1;
 			case "UTF_8": return UTF_8;
 			case "UTF_16": return UTF_16;
+			default : throw new IllegalArgumentException("Unsupported charset " + charset);
 		}
-		throw new IllegalArgumentException("Unsupported charset " + charset);
 	}
 
 	@Override
