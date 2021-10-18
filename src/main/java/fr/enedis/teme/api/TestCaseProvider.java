@@ -14,17 +14,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TestCaseProvider {
 	
-	public static Stream<HttpQuery> resouces(URI uri) {
+	public static Stream<HttpQuery> jsonRessources(URI uri) {
 		
-		return resouces(uri, (Predicate<File>)null);
+		return jsonRessources(uri, p-> p.getName().toLowerCase().endsWith(".json"));
 	}
 	
-	public static Stream<HttpQuery> resouces(URI uri, String filenamePattern) {
+	public static Stream<HttpQuery> jsonRessources(URI uri, String filenamePattern) {
 		
-		return resouces(uri, filenamePattern == null ? null : p-> p.getName().matches(filenamePattern));
+		return jsonRessources(uri, filenamePattern == null ? null : p-> p.getName().matches(filenamePattern));
 	}
 
-	public static Stream<HttpQuery> resouces(URI uri, Predicate<File> predicate) {
+	public static Stream<HttpQuery> jsonRessources(URI uri, Predicate<File> predicate) {
 		var mapper = new ObjectMapper();
 		return searchIn(uri, predicate).flatMap(f-> {
 			try {
