@@ -1,4 +1,4 @@
-package fr.enedis.teme.api;
+package fr.enedis.teme.assertapi.test;
 
 import java.net.URI;
 import java.util.Map;

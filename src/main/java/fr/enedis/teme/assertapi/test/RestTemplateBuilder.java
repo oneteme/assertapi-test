@@ -1,10 +1,11 @@
-package fr.enedis.teme.api;
+package fr.enedis.teme.assertapi.test;
 
-import static fr.enedis.teme.api.RestTemplateClientHttpRequestInitializer.init;
+import static fr.enedis.teme.assertapi.test.RestTemplateClientHttpRequestInitializer.init;
 
 import org.springframework.http.client.ClientHttpRequestInitializer;
 import org.springframework.web.client.RestTemplate;
 
+import fr.enedis.teme.assertapi.core.ServerConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,5 @@ public final class RestTemplateBuilder {
 		rt.getClientHttpRequestInitializers().add(initializer);
 		return rt;
 	}
-
 
 }

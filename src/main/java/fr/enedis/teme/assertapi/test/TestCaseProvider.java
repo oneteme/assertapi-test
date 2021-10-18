@@ -1,4 +1,4 @@
-package fr.enedis.teme.api;
+package fr.enedis.teme.assertapi.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,13 +6,21 @@ import java.net.URI;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.web.client.RestTemplate;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.enedis.teme.assertapi.core.HttpQuery;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TestCaseProvider {
+	
+	public static final Stream<HttpQuery> fromRepository(String url){
+		
+		return Stream.of(new RestTemplate().getForObject(url, HttpQuery[].class));
+	}
 	
 	public static Stream<HttpQuery> jsonRessources(URI uri) {
 		

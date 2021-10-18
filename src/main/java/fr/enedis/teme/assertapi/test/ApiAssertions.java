@@ -1,4 +1,4 @@
-package fr.enedis.teme.api;
+package fr.enedis.teme.assertapi.test;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.function.Executable;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientResponseException;
@@ -28,6 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
 
+import fr.enedis.teme.assertapi.core.HttpQuery;
+import fr.enedis.teme.assertapi.core.HttpRequest;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,10 +43,10 @@ public final class ApiAssertions {
 		assumeFalse(query.isDisabled(), "skipped test"); //not working with mvn test
     	String aUrl = query.getActual().url();
     	CompletableFuture<ResponseEntity<byte[]>> af = query.isParallel() 
-    			? supplyAsync(()-> acTemp.exchange(aUrl, query.getActual().httpMethod(), null, byte[].class), commonPool())
-    			: completedFuture(acTemp.exchange(aUrl, query.getActual().httpMethod(), null, byte[].class));
+    			? supplyAsync(()-> acTemp.exchange(aUrl, HttpMethod.valueOf(query.getActual().httpMethod()), null, byte[].class), commonPool())
+    			: completedFuture(acTemp.exchange(aUrl, HttpMethod.valueOf(query.getActual().httpMethod()), null, byte[].class));
     	try {
-        	var eRes = exTemp.exchange(query.getExpected().url(), query.getExpected().httpMethod(), null, byte[].class);
+        	var eRes = exTemp.exchange(query.getExpected().url(), HttpMethod.valueOf(query.getExpected().httpMethod()), null, byte[].class);
         	
         	var aRes = assertDoesNotThrow(()-> af.get(), "error");
         	assertEquals(eRes.getStatusCodeValue(), aRes.getStatusCodeValue(), "Status code");

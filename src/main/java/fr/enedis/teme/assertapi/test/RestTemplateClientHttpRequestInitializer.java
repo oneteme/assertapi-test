@@ -1,4 +1,4 @@
-package fr.enedis.teme.api;
+package fr.enedis.teme.assertapi.test;
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -18,6 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import fr.enedis.teme.assertapi.core.ServerConfig;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
