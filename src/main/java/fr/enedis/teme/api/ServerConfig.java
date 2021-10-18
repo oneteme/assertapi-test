@@ -1,33 +1,30 @@
 package fr.enedis.teme.api;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
 
-import lombok.Getter;
+import java.util.HashMap;
+
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@SuppressWarnings("serial")
 @NoArgsConstructor
-public class ServerConfig {
+public final class ServerConfig extends HashMap<String, String> {
 
-	private String host;
-	private int port;
-	private String authMethod; // basic, token, ... 
-	private String token;
-	private String username;
-	private String password;
-	private String accessTokenUrl;
+	private static final String PORT_KEY = "port";
+	private static final String HOST_KEY = "host";
 	
 	private ServerConfig(String host, int port) {
-		this.host = host;
-		this.port = port;
+		put(HOST_KEY, host);
+		put(PORT_KEY, valueOf(port));
 	}
 
 	public String buildRootUrl() {
     	
+		int port = getPort();
     	return format("http%s://%s", 
-    			port == 443 ? "s" : "", host) + 
+    			port == 443 ? "s" : "", getHost()) + 
     			(port == 80 || port == 443 ? "" : ":" + port) + "/";
     }
 	
@@ -35,4 +32,33 @@ public class ServerConfig {
 		
 		return new ServerConfig("localhost", port);
 	}
+	
+	public String getHost() {
+		return get(HOST_KEY);
+	}
+	
+	public int getPort(){
+		return parseInt(get(PORT_KEY));
+	}
+
+	public String getAuthMethod() {
+		return get("auth-method");
+	}
+
+	public String getToken() {
+		return get("token");
+	}
+
+	public String getUsername() {
+		return get("username");
+	}
+
+	public String getPassword() {
+		return get("password");
+	}
+
+	public String getAccessTokenUrl() {
+		return get("access-token-url");
+	}
+	
 }
