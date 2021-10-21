@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_XML;
@@ -40,7 +40,7 @@ public final class ApiAssertions {
 	
 	public static void assertResponseEquals(HttpQuery query, RestTemplate exTemp, RestTemplate acTemp) throws Exception  {
 		
-		assumeFalse(query.isDisabled(), "skipped test"); //not working with mvn test
+		assumeTrue(query.isEnable(), "skipped test"); //not working with mvn test
     	String aUrl = query.getActual().url();
     	CompletableFuture<ResponseEntity<byte[]>> af = query.isParallel() 
     			? supplyAsync(()-> acTemp.exchange(aUrl, HttpMethod.valueOf(query.getActual().httpMethod()), null, byte[].class), commonPool())
