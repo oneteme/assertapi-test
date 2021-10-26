@@ -13,7 +13,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 import fr.enedis.teme.assertapi.core.ResponseComparator;
 
-public final class JunitApiAssertions implements ResponseComparator {
+public final class JunitResponseComparator implements ResponseComparator {
 	
 	@Override
 	public void assumeEnabled(boolean enable) {
@@ -22,12 +22,12 @@ public final class JunitApiAssertions implements ResponseComparator {
 	
 	@Override
 	public ResponseEntity<byte[]> assertNotResponseException(SafeSupplier<ResponseEntity<byte[]>> supp) {
-		return assertDoesNotThrow(supp::get, "error");
+		return assertDoesNotThrow(supp::get, "Actual response exception");
 	}
 
 	@Override
 	public RestClientResponseException assertResponseException(SafeSupplier<?> supp) {
-		return assertThrows(RestClientResponseException.class, supp::get, "error");
+		return assertThrows(RestClientResponseException.class, supp::get, "Expected response exception");
 	}
 
 	@Override
@@ -56,6 +56,4 @@ public final class JunitApiAssertions implements ResponseComparator {
             throw new AssertionError(res.getMessage());
         }
 	}
-
-
 }
