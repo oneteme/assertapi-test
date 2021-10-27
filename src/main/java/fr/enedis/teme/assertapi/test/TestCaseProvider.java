@@ -1,5 +1,7 @@
 package fr.enedis.teme.assertapi.test;
 
+import static fr.enedis.teme.assertapi.core.RestTemplateBuilder.build;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.enedis.teme.assertapi.core.HttpQuery;
+import fr.enedis.teme.assertapi.core.ServerConfig;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +22,13 @@ public final class TestCaseProvider {
 	
 	public static final Stream<HttpQuery> fromRepository(String url){
 		
-		return Stream.of(new RestTemplate().getForObject(url, HttpQuery[].class));
+		return fromRepository(url, null);
+	}
+	
+	public static final Stream<HttpQuery> fromRepository(String uri, ServerConfig config){
+		
+		var template = config == null ? new RestTemplate() : build(config);
+		return Stream.of(template.getForObject(uri, HttpQuery[].class));
 	}
 	
 	public static Stream<HttpQuery> jsonRessources(URI uri) {
