@@ -1,6 +1,7 @@
 package fr.enedis.teme.assertapi.test;
 
 import static fr.enedis.teme.assertapi.core.RestTemplateBuilder.build;
+import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +59,7 @@ public final class TestCaseProvider {
 		if(predicate != null) {
 			filter = filter.and(predicate);
 		}
-		var f = new File(uri);
+		var f = new File(requireNonNull(uri));
 		if(f.isFile()) {
 			return filter.test(f) ? Stream.of(f) : Stream.empty();
 		}
