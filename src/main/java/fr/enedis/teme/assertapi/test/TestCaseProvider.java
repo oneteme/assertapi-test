@@ -46,7 +46,7 @@ public final class TestCaseProvider {
 		var mapper = new ObjectMapper();
 		return searchIn(uri, predicate).flatMap(f-> {
 			try {
-				return Stream.of(mapper.readValue(f, HttpQuery[].class)); // no build
+				return Stream.of(mapper.readValue(f, HttpQuery[].class)).map(HttpQuery::build);
 			} catch (IOException e) {
 				throw new IllegalArgumentException("Canot parse file " + f.getName(), e);
 			}
