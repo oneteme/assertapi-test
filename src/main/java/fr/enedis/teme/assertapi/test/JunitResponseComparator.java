@@ -45,6 +45,6 @@ public final class JunitResponseComparator implements ResponseComparator {
 	
 	@Override
 	public void assertionFail(Throwable t) {
-		throw new AssertionError("Assertion fail", t);
+		throw new RuntimeException("Assertion error", t); //replace by other exception
 	}
 }

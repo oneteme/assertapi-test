@@ -48,7 +48,7 @@ public final class TestCaseProvider {
 			try {
 				return Stream.of(mapper.readValue(f, HttpQuery[].class)).map(HttpQuery::build);
 			} catch (IOException e) {
-				throw new IllegalArgumentException("Canot parse this file " + f.getName(), e);
+				throw new IllegalArgumentException("Canot parse file " + f.getName(), e);
 			}
 		});
 	}
