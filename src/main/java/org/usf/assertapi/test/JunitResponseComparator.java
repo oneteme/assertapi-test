@@ -1,4 +1,4 @@
-package fr.enedis.teme.assertapi.test;
+package org.usf.assertapi.test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.skyscreamer.jsonassert.JSONCompareResult;
 import org.springframework.http.MediaType;
-
-import fr.enedis.teme.assertapi.core.ResponseComparator;
+import org.usf.assertapi.core.ResponseComparator;
 
 public final class JunitResponseComparator implements ResponseComparator {
 	

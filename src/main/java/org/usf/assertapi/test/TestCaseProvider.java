@@ -1,7 +1,7 @@
-package fr.enedis.teme.assertapi.test;
+package org.usf.assertapi.test;
 
-import static fr.enedis.teme.assertapi.core.RestTemplateBuilder.build;
 import static java.util.Objects.requireNonNull;
+import static org.usf.assertapi.core.RestTemplateBuilder.build;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,12 +13,12 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.usf.assertapi.core.ApiRequest;
+import org.usf.assertapi.core.ServerConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
-import fr.enedis.teme.assertapi.core.ApiRequest;
-import fr.enedis.teme.assertapi.core.ServerConfig;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
