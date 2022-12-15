@@ -29,14 +29,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TestCaseProvider {
 	
-	public static final Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
+	public static Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
 		var template = build(config);
 		injectMapper(template);
-		String url = "/v1/assert/api/load";
+		String uri = "/v1/assert/api/load";
 		if(map != null && !map.isEmpty()) {
-			url += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
+			uri += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
 		}
-		var cases = template.getForEntity(url, ApiRequest[].class, map);
+		var cases = template.getForEntity(uri, ApiRequest[].class, map);
 		setContext(template, cases.getHeaders().getFirst("trace"));
 		return Stream.of(cases.getBody());
 	}
