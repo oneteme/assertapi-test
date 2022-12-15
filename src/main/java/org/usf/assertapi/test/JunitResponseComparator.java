@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.skyscreamer.jsonassert.JSONCompareResult;
 import org.springframework.http.MediaType;
+import org.usf.assertapi.core.ApiRequest;
 import org.usf.assertapi.core.ResponseComparator;
 
 public final class JunitResponseComparator implements ResponseComparator {
 	
 	@Override
-	public void assumeEnabled(boolean enable) {
-		assumeTrue(enable, "skipped test");
+	public void assumeEnabled(ApiRequest query) {
+		assumeTrue(query.getConfiguration().isEnable(), "skipped test");
 	}
 
 	@Override

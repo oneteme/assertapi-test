@@ -1,11 +1,15 @@
 package org.usf.assertapi.test;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
+import static org.usf.assertapi.test.TestContext.setContext;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -25,16 +29,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TestCaseProvider {
 	
-	public static final Stream<ApiRequest> fromRepository(String url){
-		
-		return fromRepository(url, null);
-	}
-	
-	public static final Stream<ApiRequest> fromRepository(String uri, ServerConfig config){
-		
-		var template = config == null ? new RestTemplate() : build(config);
+	public static final Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
+		var template = build(config);
 		injectMapper(template);
-		return Stream.of(template.getForObject(uri, ApiRequest[].class));
+		String url = "/v1/assert/api/load";
+		if(map != null && !map.isEmpty()) {
+			url += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
+		}
+		var cases = template.getForEntity(url, ApiRequest[].class, map);
+		setContext(template, cases.getHeaders().getFirst("trace"));
+		return Stream.of(cases.getBody());
+	}
+
+	public static Stream<ApiRequest> jsonRessources(Class<?> testClass) throws URISyntaxException {
+	
+		return jsonRessources(testClass, null);
+	}
+
+	public static Stream<ApiRequest> jsonRessources(Class<?> testClass, String filenamePattern) throws URISyntaxException {
+	
+		return jsonRessources(testClass.getResource(".").toURI(), filenamePattern);
 	}
 	
 	public static Stream<ApiRequest> jsonRessources(URI uri) {
@@ -52,7 +66,7 @@ public final class TestCaseProvider {
 			try {
 				return Stream.of(mapper().readValue(f, ApiRequest[].class));
 			} catch (IOException e) {
-				throw new IllegalArgumentException("Canot parse file " + f.getName(), e);
+				throw new IllegalArgumentException("Cannot parse file " + f.getName(), e);
 			}
 		});
 	}
