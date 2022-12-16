@@ -2,8 +2,10 @@ package org.usf.assertapi.test;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static org.springframework.http.HttpMethod.GET;
+import static org.usf.assertapi.core.AssertionContext.buildContext;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
-import static org.usf.assertapi.test.TestContext.setContext;
+import static org.usf.assertapi.test.TestContext.setLocalContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,8 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -30,34 +34,35 @@ import lombok.RequiredArgsConstructor;
 public final class TestCaseProvider {
 	
 	public static Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
+		return fromRepository(config, "/v1/assert/api/load", map); //default endpoint
+	}
+
+	public static Stream<ApiRequest> fromRepository(ServerConfig config, String uri, Map<String, String> map){
 		var template = build(config);
 		injectMapper(template);
-		String uri = "/v1/assert/api/load";
 		if(map != null && !map.isEmpty()) {
 			uri += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
 		}
-		var cases = template.getForEntity(uri, ApiRequest[].class, map);
-		setContext(template, cases.getHeaders().getFirst("trace"));
+		var headers = new HttpHeaders();
+		headers.add("ctx", buildContext().toHeader());
+		var cases = template.exchange(uri, GET, new HttpEntity<>(headers), ApiRequest[].class, map);
+		setLocalContext(template, cases.getHeaders().getFirst("trace"));
 		return Stream.of(cases.getBody());
 	}
 
 	public static Stream<ApiRequest> jsonRessources(Class<?> testClass) throws URISyntaxException {
-	
 		return jsonRessources(testClass, null);
 	}
 
 	public static Stream<ApiRequest> jsonRessources(Class<?> testClass, String filenamePattern) throws URISyntaxException {
-	
 		return jsonRessources(testClass.getResource(".").toURI(), filenamePattern);
 	}
 	
 	public static Stream<ApiRequest> jsonRessources(URI uri) {
-		
 		return jsonRessources(uri, p-> p.getName().toLowerCase().endsWith(".json"));
 	}
 	
 	public static Stream<ApiRequest> jsonRessources(URI uri, String filenamePattern) {
-		
 		return jsonRessources(uri, filenamePattern == null ? null : p-> p.getName().matches(filenamePattern));
 	}
 
@@ -72,7 +77,6 @@ public final class TestCaseProvider {
 	}
 
 	private static Stream<File> searchIn(URI uri, Predicate<File> predicate) {
-		
 		Predicate<File> filter = Predicate.not(File::isDirectory);
 		if(predicate != null) {
 			filter = filter.and(predicate);
@@ -85,7 +89,6 @@ public final class TestCaseProvider {
 	}
 
 	private static void injectMapper(RestTemplate template) {
-
         for(HttpMessageConverter<?> mc : template.getMessageConverters()) {
         	if(mc instanceof MappingJackson2HttpMessageConverter) {
         		((MappingJackson2HttpMessageConverter)mc).setObjectMapper(mapper());
