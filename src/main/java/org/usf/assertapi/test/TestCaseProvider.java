@@ -23,7 +23,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.usf.assertapi.core.ApiRequest;
-import org.usf.assertapi.core.AssertionContext;
 import org.usf.assertapi.core.ServerConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
