@@ -3,6 +3,7 @@ package org.usf.assertapi.test;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
+import static org.usf.assertapi.core.AssertionContext.CTX;
 import static org.usf.assertapi.core.AssertionContext.buildContext;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
@@ -22,6 +23,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.usf.assertapi.core.ApiRequest;
+import org.usf.assertapi.core.AssertionContext;
 import org.usf.assertapi.core.ServerConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +46,7 @@ public final class TestCaseProvider {
 			uri += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
 		}
 		var headers = new HttpHeaders();
-		headers.add("ctx", buildContext().toHeader());
+		headers.add(CTX, buildContext().toHeader());
 		var cases = template.exchange(uri, GET, new HttpEntity<>(headers), ApiRequest[].class, map);
 		setLocalContext(template, cases.getHeaders().getFirst("trace"));
 		return Stream.of(cases.getBody());
