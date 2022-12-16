@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Slf4j(topic="org.usf.assertapi.core.ApiAssertion")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TestContext {
 
@@ -20,7 +20,7 @@ public final class TestContext {
 		threadLocal.set(new TestContext(template, traceUri));
 	}
 	
-	public static void testOrigin(AssertionResult r) {
+	public static void testCaseOrigin(AssertionResult r) {
 		var context = threadLocal.get();
 		if(context == null) {
 			log.warn("cannot trace result");
