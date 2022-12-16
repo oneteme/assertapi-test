@@ -16,7 +16,7 @@ public final class TestContext {
 	private final RestTemplate template;
 	private final String traceUri;
 
-	public static void setContext(RestTemplate template, String traceUri) {
+	public static void setLocalContext(RestTemplate template, String traceUri) {
 		threadLocal.set(new TestContext(template, traceUri));
 	}
 	
