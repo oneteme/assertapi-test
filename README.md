@@ -4,8 +4,8 @@ Integration pom.xml
 
 ```
 <dependency>
-  <groupId>fr.enedis.teme.api</groupId>
-  <artifactId>api-test</artifactId>
+  <groupId>org.usf.assertapi</groupId>
+  <artifactId>assertapi-test</artifactId>
   <version>${version}</version>
   <scope>test</scope>
 </dependency>
@@ -17,27 +17,29 @@ Test class
 class IntegrationTest {
   
   private ServerConfig dist;
-
-  private RestTemplate exTemp;
-  private RestTemplate acTemp;
+  private int localPort;
+  
+  private ApiAssertions assertions;
   
   @BeforeAll
   void setUp() {
-    exTemp = build(dist);
-    acTemp = build(localServer(localPort));
+    assertions = new ApiAssertionsFactory()
+        .comparing(dist, localServer(localPort, dist.getAuth())) // same auth.
+        .using(new JunitResponseComparator())
+        .build();
   }
     
+  
   @ParameterizedTest(name="{0}")
   @MethodSource("cases")
-  void test(HttpQuery query) throws Exception {
+  void test(ApiRequest query) throws Throwable {
       
-      assertResponseEquals(query, exTemp, acTemp);
+      assertions.assertApi(query);
   }
   
-  private static final Stream<? extends Arguments> cases() throws IOException, URISyntaxException {
+  private static Stream<? extends Arguments> cases() throws URISyntaxException {
 
-    return resouces(IntegrationTest.class.getResource(".").toURI(), ".+\\.json")
-        .map(Arguments::of);
+    return fromRepository("${test-repo-provider}").map(Arguments::of);
   }
 }
 
