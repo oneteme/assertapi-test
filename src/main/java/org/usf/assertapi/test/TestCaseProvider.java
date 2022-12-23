@@ -3,7 +3,7 @@ package org.usf.assertapi.test;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
-import static org.usf.assertapi.core.AssertionContext.buildContext;
+import static org.usf.assertapi.core.AssertionEnvironement.buildContext;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
 
