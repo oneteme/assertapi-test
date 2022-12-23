@@ -22,9 +22,11 @@
       <organizationUrl>http://www.enedis.fr</organizationUrl>
     </developer>
   </developers>
+  
   <scm>
     <url>https://github.com/oneteme/assertapi-test</url>
   </scm>
+  
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>

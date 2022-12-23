@@ -3,7 +3,6 @@ package org.usf.assertapi.test;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
-import static org.usf.assertapi.core.AssertionContext.CTX;
 import static org.usf.assertapi.core.AssertionContext.buildContext;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
@@ -45,7 +44,7 @@ public final class TestCaseProvider {
 			uri += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
 		}
 		var headers = new HttpHeaders();
-		headers.add(CTX, buildContext().toHeader());
+		buildContext().push(headers::add);
 		var cases = template.exchange(uri, GET, new HttpEntity<>(headers), ApiRequest[].class, map);
 		setLocalContext(template, cases.getHeaders().getFirst("trace"));
 		return Stream.of(cases.getBody());
