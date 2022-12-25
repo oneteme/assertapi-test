@@ -7,6 +7,7 @@ import org.usf.assertapi.core.ResponseComparator;
 /**
  * 
  * @author u$f
+ * @since 1.0
  *
  */
 public final class JunitResponseComparator extends ResponseComparator {
