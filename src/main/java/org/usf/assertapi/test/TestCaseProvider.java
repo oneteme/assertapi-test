@@ -4,8 +4,8 @@ import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
-import static org.usf.assertapi.core.RuntimeEnvironement.build;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
+import static org.usf.assertapi.core.RuntimeEnvironement.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public final class TestCaseProvider {
 		build().push(headers::add);
 		var cases = template.exchange(uri, GET, new HttpEntity<>(headers), ApiRequest[].class, map);
 		setLocalContext(template, cases.getHeaders().getFirst("trace"));
-		return Stream.of(cases.getBody()).sorted(comparing(ApiRequest::getName).thenComparing(ApiRequest::getUri)); //sort by api name
+		return Stream.of(cases.getBody()).sorted(comparing(ApiRequest::getUri)); //sort by api
 	}
 
 	public static Stream<ApiRequest> jsonRessources(Class<?> testClass) throws URISyntaxException {

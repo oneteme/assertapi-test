@@ -1,8 +1,8 @@
 package org.usf.assertapi.test;
 
 import org.springframework.web.client.RestTemplate;
-import org.usf.assertapi.core.ApiCheck;
-import org.usf.assertapi.core.ApiCompareResult;
+import org.usf.assertapi.core.ComparableApi;
+import org.usf.assertapi.core.ComparisonResult;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public final class TestContext {
 		threadLocal.set(new TestContext(template, traceUri));
 	}
 	
-	public static void testCaseOrigin(ApiCheck ar, ApiCompareResult cr) {
+	public static void testCaseOrigin(ComparableApi ar, ComparisonResult cr) {
 		var context = threadLocal.get();
 		if(context == null) {
 			log.warn("cannot trace result");
