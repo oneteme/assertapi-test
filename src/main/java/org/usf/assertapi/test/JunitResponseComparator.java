@@ -14,7 +14,7 @@ public final class JunitResponseComparator extends ResponseComparator {
 	
 	@Override
 	public void assumeEnabled(boolean enabled) {
-		assumeTrue(false, "api assertion skipped"); //specific JUnit exception skip test
+		assumeTrue(enabled, "api assertion skipped"); //specific JUnit exception skip test
 	}
 	
 }
