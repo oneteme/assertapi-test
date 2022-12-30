@@ -4,6 +4,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
+import static org.usf.assertapi.core.Module.defaultMapper;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
 import static org.usf.assertapi.core.RuntimeEnvironement.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
@@ -19,14 +20,10 @@ import java.util.stream.Stream;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.usf.assertapi.core.ApiRequest;
 import org.usf.assertapi.core.ServerConfig;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +73,7 @@ public final class TestCaseProvider {
 	public static Stream<ApiRequest> jsonRessources(URI uri, Predicate<File> predicate) {
 		return searchIn(uri, predicate).flatMap(f-> {
 			try {
-				return Stream.of(mapper().readValue(f, ApiRequest[].class));
+				return Stream.of(defaultMapper().readValue(f, ApiRequest[].class));
 			} catch (IOException e) {
 				throw new IllegalArgumentException("Cannot parse file " + f.getName(), e);
 			}
@@ -98,14 +95,8 @@ public final class TestCaseProvider {
 	private static void injectMapper(RestTemplate template) {
         for(HttpMessageConverter<?> mc : template.getMessageConverters()) {
         	if(mc instanceof MappingJackson2HttpMessageConverter) {
-        		((MappingJackson2HttpMessageConverter)mc).setObjectMapper(mapper());
+        		((MappingJackson2HttpMessageConverter)mc).setObjectMapper(defaultMapper());
         	}
         }
-	}
-	
-	private static ObjectMapper mapper() {
-		return Jackson2ObjectMapperBuilder.json().build()
-				.registerModule(new ParameterNamesModule());
-	}
-	
+	}	
 }

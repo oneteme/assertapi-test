@@ -26,13 +26,9 @@ public final class JunitResponseComparator extends ResponseComparator {
 	}
 	
 	@Override
-	protected void failNotEqual(Object expected, Object actual, CompareStage stage) {
-		try {
-			super.failNotEqual(expected, actual, stage); //super log error
-		}
-		catch(ApiAssertionError e) {
-			//throw the right junit exception (IDE plugin comparator)
-			throw new AssertionFailedError(e.getMessage(), e.getExpected(), e.getActual()); 
-		}
+	protected AssertionError failNotEqual(Object expected, Object actual, CompareStage stage) {
+		var e = (ApiAssertionError) super.failNotEqual(expected, actual, stage); //super log error
+		//throw the right junit exception (IDE plugin comparator)
+		return  new AssertionFailedError(e.getMessage(), e.getExpected(), e.getActual()); 
 	}
 }
