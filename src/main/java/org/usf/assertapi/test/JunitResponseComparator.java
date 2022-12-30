@@ -1,5 +1,7 @@
 package org.usf.assertapi.test;
 
+import static org.usf.assertapi.core.Module.registerAssertionFail;
+
 import org.opentest4j.AssertionFailedError;
 import org.opentest4j.TestAbortedException;
 import org.usf.assertapi.core.ApiAssertionError;
@@ -13,6 +15,10 @@ import org.usf.assertapi.core.ResponseComparator;
  *
  */
 public final class JunitResponseComparator extends ResponseComparator {
+	
+	static {
+		registerAssertionFail(TestAbortedException.class);
+	}
 	
 	@Override
 	public void assumeEnabled(boolean enabled) {
