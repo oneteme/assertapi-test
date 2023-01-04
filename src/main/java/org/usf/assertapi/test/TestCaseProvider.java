@@ -4,7 +4,6 @@ import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
-import static org.usf.assertapi.core.Module.defaultMapper;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
 import static org.usf.assertapi.core.RuntimeEnvironement.build;
 import static org.usf.assertapi.test.TestContext.setLocalContext;
@@ -25,7 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.usf.assertapi.core.ApiRequest;
 import org.usf.assertapi.core.ServerConfig;
 
-import lombok.AccessLevel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -34,14 +34,17 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0
  *
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+
+@RequiredArgsConstructor
 public final class TestCaseProvider {
 	
-	public static Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
+	private final ObjectMapper mapper;
+	
+	public Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
 		return fromRepository(config, "/v1/assert/api/load", map); //default endpoint
 	}
 
-	public static Stream<ApiRequest> fromRepository(ServerConfig config, String uri, Map<String, String> map){
+	public Stream<ApiRequest> fromRepository(ServerConfig config, String uri, Map<String, String> map){
 		var template = build(config);
 		injectMapper(template);
 		if(map != null && !map.isEmpty()) {
@@ -54,26 +57,26 @@ public final class TestCaseProvider {
 		return Stream.of(cases.getBody()).sorted(comparing(ApiRequest::getUri)); //sort by api
 	}
 
-	public static Stream<ApiRequest> jsonRessources(Class<?> testClass) throws URISyntaxException {
+	public Stream<ApiRequest> jsonRessources(Class<?> testClass) throws URISyntaxException {
 		return jsonRessources(testClass, null);
 	}
 
-	public static Stream<ApiRequest> jsonRessources(Class<?> testClass, String filenamePattern) throws URISyntaxException {
+	public Stream<ApiRequest> jsonRessources(Class<?> testClass, String filenamePattern) throws URISyntaxException {
 		return jsonRessources(testClass.getResource(".").toURI(), filenamePattern);
 	}
 	
-	public static Stream<ApiRequest> jsonRessources(URI uri) {
+	public Stream<ApiRequest> jsonRessources(URI uri) {
 		return jsonRessources(uri, p-> p.getName().toLowerCase().endsWith(".json"));
 	}
 	
-	public static Stream<ApiRequest> jsonRessources(URI uri, String filenamePattern) {
+	public Stream<ApiRequest> jsonRessources(URI uri, String filenamePattern) {
 		return jsonRessources(uri, filenamePattern == null ? null : p-> p.getName().matches(filenamePattern));
 	}
 
-	public static Stream<ApiRequest> jsonRessources(URI uri, Predicate<File> predicate) {
+	public Stream<ApiRequest> jsonRessources(URI uri, Predicate<File> predicate) {
 		return searchIn(uri, predicate).flatMap(f-> {
 			try {
-				return Stream.of(defaultMapper().readValue(f, ApiRequest[].class));
+				return Stream.of(mapper.readValue(f, ApiRequest[].class));
 			} catch (IOException e) {
 				throw new IllegalArgumentException("Cannot parse file " + f.getName(), e);
 			}
@@ -92,10 +95,10 @@ public final class TestCaseProvider {
 		return Stream.of(f.listFiles()).filter(filter);
 	}
 
-	private static void injectMapper(RestTemplate template) {
+	private void injectMapper(RestTemplate template) {
         for(HttpMessageConverter<?> mc : template.getMessageConverters()) {
         	if(mc instanceof MappingJackson2HttpMessageConverter) {
-        		((MappingJackson2HttpMessageConverter)mc).setObjectMapper(defaultMapper());
+        		((MappingJackson2HttpMessageConverter)mc).setObjectMapper(mapper);
         	}
         }
 	}	
