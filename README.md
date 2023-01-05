@@ -19,29 +19,50 @@
 ```java
 class IntegrationTest {
   
-  private ServerConfig dist;
+  private ServerConfig stableRelease;
   private int localPort;
   
-  private ApiAssertions assertions;
+  private ApiAssertion assertion;
   
   @BeforeAll
   void setUp() {
     assertion = new ApiAssertionsFactory()
-        .comparing(dist, localServer(localPort, dist.getAuth())) //same auth.
-        .using(new JunitResponseComparator())
+        .comparing(stableRelease, localServer(localPort)) //run api on stable and latest server
+        .using(new JunitResponseComparator()) //overrid default comparator by using JunitResponseComparator class
         .build();
   }
-    
   
-  @ParameterizedTest(name="{0}")
+  @ParameterizedTest(name="{0}") // using JUnit 5
   @MethodSource("cases")
   void test(ApiRequest query) throws Throwable {
-      assertions.assertApi(query);
+      assertion.assertApi(query); // compare results each other
   }
   
   private static Stream<? extends Arguments> cases() throws URISyntaxException {
-    return fromRepository("${test-repo-provider}").map(Arguments::of);
+    return TestCaseProviderBuilder().build()
+        .fromRepository(IntegrationTest.class) //supply API TestCases from local ressources
+        .map(Arguments::of);
   }
 }
-
 ```
+
+### Register custom Content comparator
+
+```java
+  TestCaseProviderBuilder().build()
+      .registerComaparator("EXCEL", ExcelComparator.class) // ExcelComparator must implements ContentComparator 
+      .fromRepository(IntegrationTest.class)
+      .map(Arguments::of);
+```
+
+### Register custom Response Transformer
+
+```java
+  TestCaseProviderBuilder().build()
+      .registerTransfomer("CAMEL_SNAKE", SnakeCaseTransformer.class) // SnakeCaseTransformer must extends ResponseTransformer
+      .fromRepository(IntegrationTest.class)
+      .map(Arguments::of);
+```
+
+
+
