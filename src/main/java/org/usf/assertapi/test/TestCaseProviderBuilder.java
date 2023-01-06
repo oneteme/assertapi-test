@@ -18,13 +18,12 @@ public final class TestCaseProviderBuilder {
 		mapper.registerSubtypes(new NamedType(c, name));
 	}
 
-	public void registerTransfomer(@NonNull String name, @NonNull Class<? extends ResponseTransformer<?>> c) {
+	public void registerTransformer(@NonNull String name, @NonNull Class<? extends ResponseTransformer<?>> c) {
 		mapper.registerSubtypes(new NamedType(c, name));
 	}
 	
 	public TestCaseProvider build() {
 		return new TestCaseProvider(mapper);
 	}
-	
 
 }
