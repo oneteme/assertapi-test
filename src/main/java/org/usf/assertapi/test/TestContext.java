@@ -34,6 +34,7 @@ public final class TestContext {
 		}
 		else {
 			context.template.put(context.traceUri, cr, ar.getId());
+			threadLocal.remove();
 		}
 	}
 	
