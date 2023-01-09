@@ -1,5 +1,6 @@
 package org.usf.assertapi.test;
 
+import static java.util.Collections.emptyMap;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -47,7 +48,10 @@ public final class TestCaseProvider {
 	public Stream<ApiRequest> fromRepository(ServerConfig config, String uri, Map<String, String> map){
 		var template = build(config);
 		injectMapper(template);
-		if(map != null && !map.isEmpty()) {
+		if(map == null) {
+			map = emptyMap();
+		}
+		else if(!map.isEmpty()) {
 			uri += "?" + map.keySet().stream().map(s-> s+"={"+s+"}").collect(joining("&"));
 		}
 		var headers = new HttpHeaders();
