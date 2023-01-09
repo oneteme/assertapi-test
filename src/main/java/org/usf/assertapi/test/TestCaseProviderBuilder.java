@@ -12,7 +12,11 @@ import lombok.NonNull;
 
 public final class TestCaseProviderBuilder {
 	
-	private final ObjectMapper mapper = defaultMapper(); //TODO inherite
+	private final ObjectMapper mapper;
+	
+	public TestCaseProviderBuilder() {
+		this.mapper = defaultMapper();
+	}
 	
 	public void registerComaparator(@NonNull String name, @NonNull Class<? extends ContentComparator<?>> c) {
 		mapper.registerSubtypes(new NamedType(c, name));
