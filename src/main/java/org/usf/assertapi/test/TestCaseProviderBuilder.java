@@ -9,15 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public final class TestCaseProviderBuilder {
 	
 	private final ObjectMapper mapper;
 	
 	public TestCaseProviderBuilder() {
-		this(defaultMapper());
+		this.mapper = defaultMapper();
 	}
 	
 	public void registerComaparator(@NonNull String name, @NonNull Class<? extends ContentComparator<?>> c) {
