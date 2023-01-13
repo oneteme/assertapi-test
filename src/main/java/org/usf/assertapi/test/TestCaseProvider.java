@@ -80,12 +80,14 @@ public final class TestCaseProvider {
 	public Stream<ApiRequest> jsonRessources(URI uri, Predicate<File> predicate) {
 		return searchIn(uri, predicate).flatMap(f-> {
 			try {
-				return Stream.of(mapper.readValue(f, ApiRequest[].class));
+				return Stream.of(mapper.readValue(f, ApiRequest[].class))
+						.map(r-> r.withLocation(f.toURI()));
 			} catch (IOException e) {
-				throw new IllegalArgumentException("Cannot parse file " + f.getName(), e);
+				throw new IllegalArgumentException("cannot read file : " + f, e);
 			}
 		});
 	}
+	
 
 	private static Stream<File> searchIn(URI uri, Predicate<File> predicate) {
 		Predicate<File> filter = Predicate.not(File::isDirectory);
