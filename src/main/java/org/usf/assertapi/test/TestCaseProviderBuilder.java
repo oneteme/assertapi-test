@@ -12,7 +12,7 @@ import lombok.NonNull;
 
 public final class TestCaseProviderBuilder {
 	
-	private final ObjectMapper mapper;
+	final ObjectMapper mapper;
 	
 	public TestCaseProviderBuilder() {
 		this.mapper = defaultMapper();

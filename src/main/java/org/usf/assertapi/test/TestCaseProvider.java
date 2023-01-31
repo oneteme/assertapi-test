@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class TestCaseProvider {
 	
-	private final ObjectMapper mapper;
+	final ObjectMapper mapper;
 	
 	public Stream<ApiRequest> fromRepository(ServerConfig config, Map<String, String> map){
 		return fromRepository(config, "/v1/assert/api/load", map); //default endpoint
