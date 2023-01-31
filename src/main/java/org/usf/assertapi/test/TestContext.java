@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j(topic="org.usf.assertapi.core.ApiAssertion")
 public final class TestContext {
 
-	private static final ThreadLocal<TestContext> threadLocal = new ThreadLocal<>();
+	static final ThreadLocal<TestContext> threadLocal = new ThreadLocal<>();
 	
-	private final RestTemplate template;
-	private final String traceUri;
+	final RestTemplate template;
+	final String traceUri;
 
 	public static void setLocalContext(RestTemplate template, String traceUri) {
 		threadLocal.set(new TestContext(template, traceUri));
