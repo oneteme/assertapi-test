@@ -88,7 +88,6 @@ public final class TestCaseProvider {
 		});
 	}
 	
-
 	private static Stream<File> searchIn(URI uri, Predicate<File> predicate) {
 		Predicate<File> filter = Predicate.not(File::isDirectory);
 		if(predicate != null) {

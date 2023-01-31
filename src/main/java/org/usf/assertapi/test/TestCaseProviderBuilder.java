@@ -18,12 +18,14 @@ public final class TestCaseProviderBuilder {
 		this.mapper = defaultMapper();
 	}
 	
-	public void registerComaparator(@NonNull String name, @NonNull Class<? extends ContentComparator<?>> c) {
+	public TestCaseProviderBuilder registerComaparator(@NonNull String name, @NonNull Class<? extends ContentComparator<?>> c) {
 		mapper.registerSubtypes(new NamedType(c, name));
+		return this;
 	}
 
-	public void registerTransformer(@NonNull String name, @NonNull Class<? extends ResponseTransformer<?>> c) {
+	public TestCaseProviderBuilder registerTransformer(@NonNull String name, @NonNull Class<? extends ResponseTransformer<?,?>> c) {
 		mapper.registerSubtypes(new NamedType(c, name));
+		return this;
 	}
 	
 	public TestCaseProvider build() {
