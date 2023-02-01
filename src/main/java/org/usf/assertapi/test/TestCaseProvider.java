@@ -28,6 +28,7 @@ import org.usf.assertapi.core.ServerConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -62,19 +63,27 @@ public final class TestCaseProvider {
 		return Stream.of(cases.getBody()).sorted(comparing(ApiRequest::getUri)); //sort by api
 	}
 
-	public Stream<ApiRequest> fromLocal(Class<?> testClass, String regex) throws URISyntaxException {
-		return fromLocal(uri(testClass),  asFilter(regex));
+	public Stream<ApiRequest> fromLocal(@NonNull Class<?> testClass) throws URISyntaxException {
+		return fromLocal(uri(testClass), defaultFilter());
+	}
+
+	public Stream<ApiRequest> fromLocal(@NonNull Class<?> testClass, @NonNull String regex) throws URISyntaxException {
+		return fromLocal(uri(testClass), asFilter(regex));
 	}
 	
-	public Stream<ApiRequest> fromLocal(Class<?> testClass, FileFilter filter) throws URISyntaxException {
+	public Stream<ApiRequest> fromLocal(@NonNull Class<?> testClass, @NonNull FileFilter filter) throws URISyntaxException {
 		return fromLocal(uri(testClass), filter);
 	}
 	
-	public Stream<ApiRequest> fromLocal(URI uri, String regex) {
-		return fromLocal(uri, regex == null ? null : asFilter(regex));
+	public Stream<ApiRequest> fromLocal(@NonNull URI uri) {
+		return fromLocal(uri, defaultFilter());
+	}
+	
+	public Stream<ApiRequest> fromLocal(@NonNull URI uri, @NonNull String regex) {
+		return fromLocal(uri, asFilter(regex));
 	}
 
-	public Stream<ApiRequest> fromLocal(URI uri, FileFilter filter) {
+	public Stream<ApiRequest> fromLocal(@NonNull URI uri, @NonNull FileFilter filter) {
 		return listFiles(Path.of(uri), filter).flatMap(f-> {
 			try {
 				return Stream.of(mapper.readValue(f, ApiRequest[].class))
