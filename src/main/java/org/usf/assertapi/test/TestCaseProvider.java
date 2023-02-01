@@ -95,7 +95,6 @@ public final class TestCaseProvider {
 	}
 	
 	private static Stream<File> listFiles(Path path, FileFilter filter) {
-		filter = requireNonNullElseGet(filter, TestCaseProvider::defaultFilter);
 		var f = path.toFile();
 		if(f.isDirectory()) {
 			return Stream.of(f.listFiles(filter));
