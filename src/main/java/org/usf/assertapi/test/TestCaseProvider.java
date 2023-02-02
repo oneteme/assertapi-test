@@ -2,7 +2,6 @@ package org.usf.assertapi.test;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNullElseGet;
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpMethod.GET;
 import static org.usf.assertapi.core.RestTemplateBuilder.build;
