@@ -2,7 +2,7 @@
 ...
 ## Status
 
-[![Java CI with Maven](https://github.com/oneteme/assertapi-test/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/oneteme/assertapi-test/actions/workflows/maven-publish.yml)
+[![CI/CD](https://github.com/oneteme/assertapi-test/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/oneteme/assertapi-test/actions/workflows/main.yml)
 
 ## MAVEN Integration
 
