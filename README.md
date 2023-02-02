@@ -34,7 +34,7 @@ class IntegrationTest {
   
   @ParameterizedTest(name="{0}") // using JUnit 5
   @MethodSource("cases")
-  void test(ApiRequest query) throws Throwable {
+  void test(ApiRequest query) {
       assertion.assertApi(query); // compare results each other
   }
   
