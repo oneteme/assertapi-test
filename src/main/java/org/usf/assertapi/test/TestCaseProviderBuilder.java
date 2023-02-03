@@ -1,6 +1,6 @@
 package org.usf.assertapi.test;
 
-import static org.usf.assertapi.core.PolymorphicType.typeName;
+import static org.usf.assertapi.core.PolymorphicType.jsonTypeName;
 import static org.usf.assertapi.core.Utils.defaultMapper;
 
 import org.usf.assertapi.core.PolymorphicType;
@@ -24,7 +24,7 @@ public final class TestCaseProviderBuilder {
 	@SuppressWarnings("unchecked")
 	public TestCaseProviderBuilder register(@NonNull Class<? extends PolymorphicType>... classes) {
 		for(var c : classes) {
-			if(typeName(c) == null) {
+			if(jsonTypeName(c) == null) {
 				throw new IllegalArgumentException("cannot find annotation @JsonTypeName on " + c.getCanonicalName());
 			}
 		}
