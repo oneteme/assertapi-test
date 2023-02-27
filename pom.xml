@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oneteme.assertapi</groupId>
 	<artifactId>assertapi-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 	<name>assertapi-test</name>
 	<description>assertapi-test</description>
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>io.github.oneteme.assertapi</groupId>
 			<artifactId>assertapi-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -74,9 +74,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
+			<artifactId>junit-jupiter-params</artifactId>
 			<version>${junit.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

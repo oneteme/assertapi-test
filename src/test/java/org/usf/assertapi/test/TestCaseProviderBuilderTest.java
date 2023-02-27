@@ -6,45 +6,64 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.usf.assertapi.core.DataComparator;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.usf.assertapi.core.CsvDataComparator;
+import org.usf.assertapi.core.DataMapper;
 import org.usf.assertapi.core.DataTransformer;
-import org.usf.assertapi.core.ReleaseTarget;
+import org.usf.assertapi.core.JsonDataComparator;
+import org.usf.assertapi.core.JsonDataMapper;
+import org.usf.assertapi.core.JsonKeyMapper;
+import org.usf.assertapi.core.JsonPathFilter;
+import org.usf.assertapi.core.JsonPathMover;
+import org.usf.assertapi.core.ModelComparator;
+import org.usf.assertapi.core.ModelTransformer;
+import org.usf.assertapi.core.PolymorphicType;
+
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 class TestCaseProviderBuilderTest {
 
 	@Test
 	void testTestCaseProviderBuilder() {
-		var builder = new TestCaseProviderBuilder();
-		assertNotNull(builder.mapper);
-		assertTrue(builder.mapper.getRegisteredModuleIds().contains("assertapi"));
+		var mapper = new TestCaseProviderBuilder().mapper;
+		assertNotNull(mapper.getSubtypeResolver());
+		assertTrue(mapper.getRegisteredModuleIds().contains("assertapi"));
+		assertTrue(mapper.getRegisteredModuleIds().contains("jackson-module-parameter-names"));
+	}
+
+	@ParameterizedTest
+	@ValueSource(classes = {
+			CsvDataComparator.class, JsonDataComparator.class, //comparators
+			JsonDataMapper.class, JsonKeyMapper.class, JsonPathMover.class, JsonPathFilter.class, //modelTransformers
+			DataMapper.class}) //dataTransformers
+	void testRegister(Class<? extends ModelComparator<?>> classe) {
+		var builder = new TestCaseProviderBuilder(new JsonMapper());
+		assertSame(builder, builder.register(classe));
 	}
 
 	@Test
-	void testRegisterComaparator() {
-		var builder = new TestCaseProviderBuilder();
-		assertSame(builder, builder.registerComaparator("dummy", DummyComparator.class));
+	void testRegister_comaparator() {
+		class DummyClass implements ModelComparator<String> {
+			public CompareResult compare(String expected, String actual) {return null;}
+		}
+		testRegisterPolymorphicType(DummyClass.class);
 	}
-	
+
 	@Test
-	void testRegisterComaparator_null() {
-		var builder = new TestCaseProviderBuilder();
-		assertThrows(NullPointerException.class, ()-> builder.registerComaparator("dummy", null));
-		assertThrows(NullPointerException.class, ()-> builder.registerComaparator(null, DummyComparator.class));
-		//TODO parse
+	void testRegister_model_transformer() {
+		class DummyClass implements ModelTransformer<String> {
+			public String transform(String resp) {return resp;}
+		}
+		testRegisterPolymorphicType(DummyClass.class);
 	}
-	
+
 	@Test
-	void testRegisterTransformer() {
-		var builder = new TestCaseProviderBuilder();
-		assertSame(builder, builder.registerTransformer("dummy", DummyTranasformer.class));
-		//TODO parse
-	}
-	
-	@Test
-	void testRegisterTransformer_null() {
-		var builder = new TestCaseProviderBuilder();
-		assertThrows(NullPointerException.class, ()-> builder.registerTransformer("dummy", null));
-		assertThrows(NullPointerException.class, ()-> builder.registerTransformer(null, DummyTranasformer.class));
+	void testRegister_data_transformer() {
+		class DummyClass implements DataTransformer {
+			public Object transform(Object resp) {return resp;}
+		}
+		testRegisterPolymorphicType(DummyClass.class);
 	}
 	
 	@Test
@@ -53,28 +72,12 @@ class TestCaseProviderBuilderTest {
 		assertSame(builder.mapper, builder.build().mapper);
 	}
 	
-	class DummyComparator implements DataComparator<String> {
-
-		@Override
-		public String getType() {return null;}
-
-		@Override
-		public CompareResult compare(String expected, String actual) {return null;}
-
-		@Override
-		public DataTransformer[] getTransformers() {return null;}
+	void testRegisterPolymorphicType(Class<? extends PolymorphicType> type) {
+		var builder = new TestCaseProviderBuilder();
+		assertSame(builder, builder.register("dummy", type));
+		assertThrows(NullPointerException.class, ()-> builder.register("dummy", null));
+		assertThrows(NullPointerException.class, ()-> builder.register(null, type));
+		assertThrows(IllegalArgumentException.class, ()-> builder.register(type));
 	}
 	
-	class DummyTranasformer extends DataTransformer<String, String> {
-
-		protected DummyTranasformer(ReleaseTarget[] applyOn) {
-			super(applyOn);
-		}
-
-		@Override
-		public String getType() {return null;}
-
-		@Override
-		protected String transform(String resp) {return null;}
-	}
 }
