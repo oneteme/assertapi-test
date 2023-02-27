@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.oneteme.assertapi</groupId>
 	<artifactId>assertapi-test</artifactId>
-	<version>0.0.1</version>
+  <version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>assertapi-test</name>
 	<description>assertapi-test</description>
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>io.github.oneteme.assertapi</groupId>
 			<artifactId>assertapi-core</artifactId>
-			<version>0.0.1</version>
+      <version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
