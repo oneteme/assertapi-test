@@ -64,7 +64,10 @@ class TestContextTest {
 	}
 	
 	private static ApiRequest dummyApi(long id, String uri) {
-		return new ApiRequest(id, null, null, null, uri, null, null, null, null, null, null, null, null, null);
+		var req = new ApiRequest();
+		req.setId(id);
+		req.setUri(uri);
+		return req;
 	}
 
 	private static ComparisonResult dummyResult() {
