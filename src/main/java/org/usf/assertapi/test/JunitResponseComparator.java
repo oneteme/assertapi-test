@@ -14,9 +14,9 @@ import org.usf.assertapi.core.ResponseComparator;
 public final class JunitResponseComparator extends ResponseComparator {
 	
 	@Override
-	public void assertionFail(Throwable t) {
+	public void assertionFail(AssertionError err) {
 		try {
-			super.assertionFail(t);
+			super.assertionFail(err);
 		}
 		catch(ApiAssertionError e) {
 			if(e.isSkipped()) {
